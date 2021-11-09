@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Azure Devops Utils Extension",
-    "description": "A complete no-brainer tools for the modern developer (Unofficial - please microsoft don't sue me).",
+    "description": "A complete no-brainer tool suite for the modern developer (Unofficial - please microsoft don't sue me).",
     "version": "1.0.0",
     "content_scripts": [{
         "matches": ["https://dev.azure.com/*"],
