@@ -1,0 +1,17 @@
+{
+  "name": "azure-utils-chrome-extension",
+  "version": "0.0.1",
+  "description": "A complete no-brainer tool suite for the modern developer (Unofficial - please microsoft don't sue me).",
+  "main": "Content.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leodelgadodev/azure-utils-chrome-extension.git"
+  },
+  "keywords": [],
+  "author": "leodelgadodev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leodelgadodev/azure-utils-chrome-extension/issues"
+  },
+  "homepage": "https://github.com/leodelgadodev/azure-utils-chrome-extension#readme"
+}
