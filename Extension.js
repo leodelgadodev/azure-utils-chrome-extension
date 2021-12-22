@@ -138,14 +138,6 @@ function addPullRequestButtons() {
 
     configureBtnFor(srcBranchBtnElement, 0, "source", PR_HeaderElement);
     configureBtnFor(targetBranchBtnElement, PR_HeaderElement.children.length-2, "target", PR_HeaderElement);
-
-    document.addEventListener('keydown', e => {
-        if (srcBranchBtnElement !== null && e.ctrlKey && e.key === 'b') {
-            srcBranchBtnElement.click();
-        } else {
-            console.warn('[Azure Devops Utils Extension] unable to use Ctrl+B shortcut, is html element rendered?')
-        }
-    });
 }
 
 function configureBtnFor(aBranch, prHeaderChild, branchType, branchTextHTML) {
