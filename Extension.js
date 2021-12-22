@@ -56,24 +56,27 @@ if (hasReloadedPage()) {
 
 
 function waitForCreatePrMessagebar() {
-    waitForElement(".bolt-messagebar.severity-info", 8000).then(() => { // fixes first visit not loading extension
-        onUrlChangeForCreatePR();
-    }).catch((querySelector) => {
-        console.warn(`[Azure Devops Utils Extension] Element ${querySelector} not found.`)
-    })
+    if (isGitRepositoryUrl()) {
+        waitForElement(".bolt-messagebar.severity-info", 8000).then(() => { // fixes first visit not loading extension
+            onUrlChangeForCreatePR();
+        }).catch((querySelector) => {
+            console.warn(`[Azure Devops Utils Extension] Element ${querySelector} not found.`)
+        })
+    }
 }
 
 function waitForPullRequestPage() {
-    waitForElement(".pr-header-branches", 9000).then(() => { // fixes first visit not loading extension
-        onUrlChange();
-    }).catch((querySelector) => {
-        console.warn(`[Azure Devops Utils Extension] Element ${querySelector} not found.`)
-    })
+    if (isPullRequestPageUrl()) {
+        waitForElement(".pr-header-branches", 9000).then(() => { // fixes first visit not loading extension
+            onUrlChange();
+        }).catch((querySelector) => {
+            console.warn(`[Azure Devops Utils Extension] Element ${querySelector} not found.`)
+        })
+    }
 }
 
 function onUrlChangeForCreatePR() {
-    const isGitRepositoryUrl = location.href.split('/').some((urlSection) => urlSection === '_git');
-    if (isGitRepositoryUrl && hasCreatePrMessagebar() && !isCreatePRCopyBranchBtnRendered()) {
+    if (hasCreatePrMessagebar() && !isCreatePRCopyBranchBtnRendered()) {
         const createPR_branchUrl = document.getElementsByClassName('monospaced-text bolt-link')[0]
         createPR_branchUrl.insertAdjacentHTML('afterEnd', buttonHTML("created-branch", 'display: inline-block;'));
         const createPrBranchBtnElement = document.getElementById("azure-utils-ext-created-branch-branch-btn");
@@ -83,6 +86,14 @@ function onUrlChangeForCreatePR() {
 
 function hasReloadedPage() {
     return window.performance.getEntriesByType("navigation") && window.performance.getEntriesByType("navigation")[0].type === 'reload';
+}
+
+function isGitRepositoryUrl() {
+    return location.href.split('/').some((urlSection) => urlSection === '_git');
+}
+
+function isPullRequestPageUrl() {
+    return location.href.split('/').some((urlSection) => urlSection === 'pullrequest');
 }
 
 function isCopyBranchBtnRendered() { // fixes button rendering multiple times
@@ -99,8 +110,7 @@ function hasCreatePrMessagebar() {
 
 function onUrlChange() {
     try {
-        const isPullRequestURL = location.href.split('/').some((urlSection) => urlSection === 'pullrequest');
-        if (isPullRequestURL && !isCopyBranchBtnRendered()) {
+        if (!isCopyBranchBtnRendered()) {
             addPullRequestButtons();
         }
 
@@ -128,6 +138,14 @@ function addPullRequestButtons() {
 
     configureBtnFor(srcBranchBtnElement, 0, "source", PR_HeaderElement);
     configureBtnFor(targetBranchBtnElement, PR_HeaderElement.children.length-2, "target", PR_HeaderElement);
+
+    document.addEventListener('keydown', e => {
+        if (srcBranchBtnElement !== null && e.ctrlKey && e.key === 'b') {
+            srcBranchBtnElement.click();
+        } else {
+            console.warn('[Azure Devops Utils Extension] unable to use Ctrl+B shortcut, is html element rendered?')
+        }
+    });
 }
 
 function configureBtnFor(aBranch, prHeaderChild, branchType, branchTextHTML) {
@@ -156,8 +174,4 @@ function configureBtnFor(aBranch, prHeaderChild, branchType, branchTextHTML) {
     });
 }
 
-document.addEventListener('keydown', e => {
-    if (e.ctrlKey && e.key === 'b') {
-        srcBranchBtnElement.click();
-    }
-});
+
