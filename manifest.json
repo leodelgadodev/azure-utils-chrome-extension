@@ -5,8 +5,8 @@
     "version": "0.0.1",
     "content_scripts": [{
         "matches": ["https://dev.azure.com/*"],
-        "js": ["Content.js"]}
-    ],
+        "js": ["Extension.js"]
+    }],
     "icons": { 
         "16": "icon.png",
         "48": "icon.png",
